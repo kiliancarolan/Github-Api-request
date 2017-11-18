@@ -1,0 +1,6 @@
+install.packages("jsonlite")
+library(jsonlite)
+intall.packages("httpuv")
+library(httpuv)
+instal.packages("httr")
+library(httr)
