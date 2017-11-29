@@ -1,6 +1,7 @@
 library(jsonlite)
 library(httpuv)
 library(httr)
+library(plyr)
 oauth_endpoints("github")
 myapp <- oauth_app(appname = "Software_Engineering_Kilian_Carolan",
                    key = "237cd284e97e7cb3d561",
@@ -29,6 +30,16 @@ jsonTest=content(testData)
 testDF=jsonlite::fromJSON(jsonlite::toJSON(jsonTest))
 testDF
 testDF$followers
+i=1
+while(i<50)
+{
+  testLoopPaste<-paste0(usersTest,"/",loginsName[i])
+  testLoopData=GET(testLoopPaste,gtoken)
+  jsonLoopTest=content(testLoopData)
+  testLoopDF=jsonlite::fromJSON(jsonlite::toJSON(jsonLoopTest))
+  print(paste("name of user is ",loginsName[i]," number of followers ", testLoopDF$followers))
+  i=i+1
+}
 #logins <- rbind_pages(pages)
 logins$avatar_url<- NULL
 logins$gravatar_id<-NULL
