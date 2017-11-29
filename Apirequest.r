@@ -19,11 +19,20 @@ for(i in 1:2)
   pages[[i+1]] <- mydataFrame
   logins <- rbind_pages(pages)
 }
-
+loginsName<-logins$login
+loginsName
+loginsName[3]
+##Test Code to get number of followers from sample of users
+testPaste<-paste0(usersTest,"/",loginsName[3])
+testData=GET(testPaste,gtoken)
+jsonTest=content(testData)
+testDF=jsonlite::fromJSON(jsonlite::toJSON(jsonTest))
+testDF
+testDF$followers
 #logins <- rbind_pages(pages)
 logins$avatar_url<- NULL
 logins$gravatar_id<-NULL
-for(i)
+ 
 #check
 nrow(logins)
 length(logins)
