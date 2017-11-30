@@ -31,19 +31,35 @@ testDF=jsonlite::fromJSON(jsonlite::toJSON(jsonTest))
 testDF
 testDF$followers
 i=1
-while(i<50)
-{
+
   testLoopPaste<-paste0(usersTest,"/",loginsName[i])
   testLoopData=GET(testLoopPaste,gtoken)
   jsonLoopTest=content(testLoopData)
   testLoopDF=jsonlite::fromJSON(jsonlite::toJSON(jsonLoopTest))
-  print(paste("name of user is ",loginsName[i]," number of followers ", testLoopDF$followers))
+  print(paste("name of user is ",loginsName[i]," number of followers ", testLoopDF$followers,
+              " They follow ",testLoopDF$following, "people"))
+  plot(testLoopDF$followers,testLoopDF$following, type=
+       "b",main="Followers vs following",xlab="Followers",ylab="Following")
+  i=i+1
+
+###Show testusers followers details
+
+i=1
+while(i<3)
+{
+  followerPaste<-paste0(usersTest,"/",loginsName[i],"/followers")
+  followerData=GET(followerPaste,gtoken)
+  jsonfollower=content(followerData)
+  followerDF=jsonlite::fromJSON(jsonlite::toJSON(jsonfollower))
+  followerDF
+  followerNames<-followerDF$login
+  print(followerNames)
   i=i+1
 }
 #logins <- rbind_pages(pages)
 logins$avatar_url<- NULL
 logins$gravatar_id<-NULL
- 
+
 #check
 nrow(logins)
 length(logins)
