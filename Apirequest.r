@@ -106,7 +106,8 @@ while(i<3)
   print(followerNames)
   i=i+1
 }
-
+###Getting Commit stats for a repository
+weeklist<-c()
 contributeurl<-paste0(githubURL,"/repos/norvig/pytudes/stats/participation")
 participationData=GET(contributeurl,gtoken)
 jsonParticipation=content(participationData)
@@ -116,5 +117,12 @@ ownerCommits=participationDF$owner
 outsiderCommits=(participationDF$all)-(participationDF$owner)
 ownerCommits
 outsiderCommits
-ownervsoutsider<-data.frame(ownerCommits,outsiderCommits)
+j=0
+for(j in 1:length(ownerCommits))
+{
+  weeknumber<-paste0("Week ", j)
+  weeklist<-c(weeklist,weeknumber)
+}
+weeklist
+ownervsoutsider<-data.frame(weeklist,ownerCommits,outsiderCommits)
 ownervsoutsider
