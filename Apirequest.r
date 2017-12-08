@@ -21,7 +21,7 @@ usersUrl<-("https://api.github.com/users")
 pages<-list()
 for(i in 1:2)
 {
-  mydataPaste<-paste0(usersUrl, "?per_page=75&page=",i)
+  mydataPaste<-paste0(usersUrl, "?per_page=50&page=",i)
   mydata<-GET(mydataPaste,gtoken)
   json1 = content(mydata)
   mydataFrame = jsonlite::fromJSON(jsonlite::toJSON(json1))
@@ -38,7 +38,7 @@ followerlist<-c()
 namelist<-c()
 i=1
 
-while(i<70)
+while(i<101)
 {
   loopPaste<-paste0(usersUrl,"/",loginsName[i])
   loopData=GET(loopPaste,gtoken)
@@ -50,47 +50,14 @@ while(i<70)
   followinglist=c(followinglist,numFollowing)
   followerlist<-c(followerlist,numFollower)
   namelist<-c(namelist,name)
-  print(".")
+  print(paste0("getting user and details ", i))
   
   i=i+1
 }
-followervsfollowing<-data.frame(namelist,followinglist,followersist)
+followervsfollowing<-data.frame(namelist,followinglist,followerlist)
 followervsfollowing
 qplot(followinglist,followerlist,followervsfollowing,xlab="Number Following", 
       ylab="Number of Folllowers", main="graph of followers vs following")
-
-
-
-##Graph user event activity vs num of followers
-eventlist<-c()
-followerlist2<-c()
-i=1
-eventPaste<-paste0(usersUrl,"/","octocat","/events/public")
-eventData=GET(eventPaste,gtoken)
-eventJson=content(eventData)
-eventDF=jsonlite::fromJSON(jsonlite::toJSON(eventJson))
-eventDF
-eventJson
-
-while(i<70)
-{
-  ###get number of followers
-  loopPaste2<-paste0(usersUrl,"/",loginsName[i])
-  loopData2=GET(loopPaste2,gtoken)
-  jsonLoop2=content(loopData2)
-  loopDF2=jsonlite::fromJSON(jsonlite::toJSON(jsonLoop2))
-  numFollower<-loopD2F$followers
-  ###get number of events
-  eventPaste<-paste0(usersUrl,"/",loginsName[i],"/events/public")
-  eventData=GET(eventPaste,gtoken)
-  eventJson=content(eventDara)
-  eventDF=jsonlite::fromJSON(jsonlite::toJSON(eventJson))
-  
-  eventlist=c(eventlist,numEvents)
-  followerlist2<-c(followerlist2,numFollower)
-  
-  i=i+1
-}
 
 ###Show users followers details
 
@@ -106,23 +73,45 @@ while(i<3)
   print(followerNames)
   i=i+1
 }
-###Getting Commit stats for a repository
-weeklist<-c()
-contributeurl<-paste0(githubURL,"/repos/norvig/pytudes/stats/participation")
-participationData=GET(contributeurl,gtoken)
-jsonParticipation=content(participationData)
-participationDF=jsonlite::fromJSON(jsonlite::toJSON(jsonParticipation))
-participationDF
-ownerCommits=participationDF$owner
-outsiderCommits=(participationDF$all)-(participationDF$owner)
-ownerCommits
-outsiderCommits
-j=0
-for(j in 1:length(ownerCommits))
+###Get user name
+getUser<-function()
 {
-  weeknumber<-paste0("Week ", j)
-  weeklist<-c(weeklist,weeknumber)
+  user <- readline(prompt="Enter user name ")
+  return(user)
 }
-weeklist
-ownervsoutsider<-data.frame(weeklist,ownerCommits,outsiderCommits)
-ownervsoutsider
+###Get repository Name
+getRepo<-function()
+{
+  repo<-readline(prompt="Enter repository name")
+  return(repo)
+}
+
+###Getting Commit stats for a repository
+repositoryParticipation<-function(desiredUser,desiredRepo)
+{
+  weeklist<-c()
+  contributeurl<-paste0(githubURL,"/repos/",desiredUser,"/",desiredRepo,"/stats/participation")
+  participationData=GET(contributeurl,gtoken)
+  jsonParticipation=content(participationData)
+  participationDF=jsonlite::fromJSON(jsonlite::toJSON(jsonParticipation))
+  participationDF
+  ownerCommits=participationDF$owner
+  outsiderCommits=(participationDF$all)-(participationDF$owner)
+  ownerCommits
+  outsiderCommits
+  j=0
+  for(j in 1:length(ownerCommits))
+  {
+    weeknumber<-paste0("Week ", j)
+    weeklist<-c(weeklist,weeknumber)
+  }
+  weeklist
+  ownervsoutsider<-data.frame(weeklist,ownerCommits,outsiderCommits)
+  ownervsoutsider
+}
+### Try typing norvig for user name and pytudes for repository name as example
+userName<-getUser()
+repoName<-getRepo()
+repositoryParticipation(userName,repoName)
+
+
