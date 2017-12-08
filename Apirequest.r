@@ -28,28 +28,68 @@ for(i in 1:2)
   pages[[i+1]] <- mydataFrame
   logins <- rbind_pages(pages)
 }
+logins
+loginsName<-logins$login
 ### Following code will produce a graph of users Followers Vs Following Numbers 
 ### given sample size of 70
 followinglist<-c()
 followerlist<-c()
+namelist<-c()
 i=1
 
 while(i<70)
 {
-  testLoopPaste<-paste0(usersUrl,"/",loginsName[i])
-  testLoopData=GET(testLoopPaste,gtoken)
-  jsonLoopTest=content(testLoopData)
-  testLoopDF=jsonlite::fromJSON(jsonlite::toJSON(jsonLoopTest))
-  testFollower<-testLoopDF$followers
-  testFollowing<-testLoopDF$following
-  print(paste("name of user is ",loginsName[i]," number of followers ", testLoopDF$followers,
-              " They follow ",testLoopDF$following, "people"))
-  followinglist=c(followinglist,testFollowing)
-  followerlist<-c(followerlist,testFollower)
+  loopPaste<-paste0(usersUrl,"/",loginsName[i])
+  loopData=GET(loopPaste,gtoken)
+  jsonLoop=content(loopData)
+  loopDF=jsonlite::fromJSON(jsonlite::toJSON(jsonLoop))
+  numFollower<-loopDF$followers
+  numFollowing<-loopDF$following
+  name<-loopDF$login
+  followinglist=c(followinglist,numFollowing)
+  followerlist<-c(followerlist,numFollower)
+  namelist<-c(namelist,name)
+  print(".")
   
   i=i+1
 }
-plot(followinglist,followerlist)
+followervsfollowing<-data.frame(namelist,followinglist,followersist)
+followervsfollowing
+qplot(followinglist,followerlist,followervsfollowing,xlab="Number Following", 
+      ylab="Number of Folllowers", main="graph of followers vs following")
+
+
+
+##Graph user event activity vs num of followers
+eventlist<-c()
+followerlist2<-c()
+i=1
+eventPaste<-paste0(usersUrl,"/","octocat","/events/public")
+eventData=GET(eventPaste,gtoken)
+eventJson=content(eventData)
+eventDF=jsonlite::fromJSON(jsonlite::toJSON(eventJson))
+eventDF
+eventJson
+
+while(i<70)
+{
+  ###get number of followers
+  loopPaste2<-paste0(usersUrl,"/",loginsName[i])
+  loopData2=GET(loopPaste2,gtoken)
+  jsonLoop2=content(loopData2)
+  loopDF2=jsonlite::fromJSON(jsonlite::toJSON(jsonLoop2))
+  numFollower<-loopD2F$followers
+  ###get number of events
+  eventPaste<-paste0(usersUrl,"/",loginsName[i],"/events/public")
+  eventData=GET(eventPaste,gtoken)
+  eventJson=content(eventDara)
+  eventDF=jsonlite::fromJSON(jsonlite::toJSON(eventJson))
+  
+  eventlist=c(eventlist,numEvents)
+  followerlist2<-c(followerlist2,numFollower)
+  
+  i=i+1
+}
 
 ###Show users followers details
 
