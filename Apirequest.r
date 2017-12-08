@@ -14,6 +14,7 @@ github_token <- oauth2.0_token(oauth_endpoints("github"), myapp)
 gtoken <- config(token = github_token)
 
 ###BaseUrl
+githubURL<-("https://api.github.com")
 usersUrl<-("https://api.github.com/users")
 
 ###Allow for pagnation
@@ -106,3 +107,14 @@ while(i<3)
   i=i+1
 }
 
+contributeurl<-paste0(githubURL,"/repos/norvig/pytudes/stats/participation")
+participationData=GET(contributeurl,gtoken)
+jsonParticipation=content(participationData)
+participationDF=jsonlite::fromJSON(jsonlite::toJSON(jsonParticipation))
+participationDF
+ownerCommits=participationDF$owner
+outsiderCommits=(participationDF$all)-(participationDF$owner)
+ownerCommits
+outsiderCommits
+ownervsoutsider<-data.frame(ownerCommits,outsiderCommits)
+ownervsoutsider
