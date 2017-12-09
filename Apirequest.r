@@ -107,20 +107,19 @@ repositoryParticipation<-function(desiredUser,desiredRepo,weekVector)
   ownervsoutsider<-data.frame(weekVector,ownerCommits,outsiderCommits)
   return(ownervsoutsider)
 }
-### Try typing norvig for user name and pytudes for repository name as example
+### Try typing tensorflow for user name and tensorflow for repository name as example
 userName<-getUser()
 repoName<-getRepo()
 weekVector<-c()
 ownervsoutsiderDF=repositoryParticipation(userName,repoName,weekVector)
-weekNum<-(ownervsoutsiderDF$weekVector)
+ownerweekNum<-(ownervsoutsiderDF$weekVector)
+outsiderweekNum<-(ownervsoutsiderDF$weekVector)
 ownerCommitNum<-(ownervsoutsiderDF$ownerCommits)
 outsiderCommitNum<-(ownervsoutsiderDF$outsiderCommits)
-ownerDF<-data.frame(x=weekNum,y=ownerCommitNum)
-outsiderDF<-data.frame(x=weekNum,y=outsiderCommitNum)
-ownerDF
-outsiderDF
+ownerDF<-data.frame(x=ownerweekNum,y=ownerCommitNum)
+outsiderDF<-data.frame(x=outsiderweekNum,y=outsiderCommitNum)
 ownervsoutsiderDF
 ggplot(ownerDF,aes(x,y))+geom_point(aes(color="owners commits"))+
   geom_point(data=outsiderDF,aes(color="Non owner commits"))+
-  labs(color="Legend")
+  labs(x="Week",y="Number of Commits",color="Legend",title="Commits made by Owner vs Contributer")
 
