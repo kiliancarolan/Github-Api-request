@@ -87,9 +87,8 @@ getRepo<-function()
 }
 
 ###Getting Commit stats for a repository
-repositoryParticipation<-function(desiredUser,desiredRepo)
+repositoryParticipation<-function(desiredUser,desiredRepo,weekVector)
 {
-  weeklist<-c()
   contributeurl<-paste0(githubURL,"/repos/",desiredUser,"/",desiredRepo,"/stats/participation")
   participationData=GET(contributeurl,gtoken)
   jsonParticipation=content(participationData)
@@ -102,16 +101,26 @@ repositoryParticipation<-function(desiredUser,desiredRepo)
   j=0
   for(j in 1:length(ownerCommits))
   {
-    weeknumber<-paste0("Week ", j)
-    weeklist<-c(weeklist,weeknumber)
+    weekVector<-c(weekVector,j)
+    print(j)
   }
-  weeklist
-  ownervsoutsider<-data.frame(weeklist,ownerCommits,outsiderCommits)
-  ownervsoutsider
+  ownervsoutsider<-data.frame(weekVector,ownerCommits,outsiderCommits)
+  return(ownervsoutsider)
 }
 ### Try typing norvig for user name and pytudes for repository name as example
 userName<-getUser()
 repoName<-getRepo()
-repositoryParticipation(userName,repoName)
-
+weekVector<-c()
+ownervsoutsiderDF=repositoryParticipation(userName,repoName,weekVector)
+weekNum<-(ownervsoutsiderDF$weekVector)
+ownerCommitNum<-(ownervsoutsiderDF$ownerCommits)
+outsiderCommitNum<-(ownervsoutsiderDF$outsiderCommits)
+ownerDF<-data.frame(x=weekNum,y=ownerCommitNum)
+outsiderDF<-data.frame(x=weekNum,y=outsiderCommitNum)
+ownerDF
+outsiderDF
+ownervsoutsiderDF
+ggplot(ownerDF,aes(x,y))+geom_point(aes(color="owners commits"))+
+  geom_point(data=outsiderDF,aes(color="Non owner commits"))+
+  labs(color="Legend")
 
