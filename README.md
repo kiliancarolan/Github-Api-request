@@ -15,4 +15,6 @@ Below is a brief guide on how to use R code in repository to acess github
 4 to run repository related functions you type the name of the repository owner and the repository name into console when prompted
 
 
-All code should be easily adaptable to suit different purposes
+All code should be easily adaptable to suit different purposes here are some example of charts created 
+
+![alt text](https://github.com/kiliancarolan/Github-Api-request/blob/master/Followers%20vs%20Following%20using%20GGplot.png)
