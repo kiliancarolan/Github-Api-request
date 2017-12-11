@@ -17,4 +17,4 @@ Below is a brief guide on how to use R code in repository to acess github
 
 All code should be easily adaptable to suit different purposes here are some example of charts created 
 
-![alt text](https://github.com/kiliancarolan/Github-Api-request/blob/master/Followers%20vs%20Following%20using%20GGplot.png)
+![alt text](https://github.com/kiliancarolan/Github-Api-request/commit/9cc53d0f0b5a5c36e19c83f29ba92c9e707e87da)
