@@ -32,7 +32,7 @@ for(i in 1:2)
 logins
 loginsName<-logins$login
 ### Following code will produce a graph of users Followers Vs Following Numbers 
-### given sample size of 70
+### given sample size of 1000
 followinglist<-c()
 followerlist<-c()
 namelist<-c()
@@ -59,20 +59,6 @@ followervsfollowing
 qplot(followinglist,followerlist,followervsfollowing,xlab="Number Following", 
       ylab="Number of Folllowers", main="graph of followers vs following")
 
-###Show users followers details
-
-i=1
-while(i<3)
-{
-  followerPaste<-paste0(usersUrl,"/",loginsName[i],"/followers")
-  followerData=GET(followerPaste,gtoken)
-  jsonfollower=content(followerData)
-  followerDF=jsonlite::fromJSON(jsonlite::toJSON(jsonfollower))
-  followerDF
-  followerNames<-followerDF$login
-  print(followerNames)
-  i=i+1
-}
 ###Get user name
 getUser<-function()
 {
@@ -102,7 +88,6 @@ repositoryParticipation<-function(desiredUser,desiredRepo,weekVector)
   for(j in 1:length(ownerCommits))
   {
     weekVector<-c(weekVector,j)
-    print(j)
   }
   ownervsoutsider<-data.frame(weekVector,ownerCommits,outsiderCommits)
   return(ownervsoutsider)
@@ -116,7 +101,7 @@ getRepoLanguage<-function(desiredUser,dersiredRepo)
   languageDF=data.frame(languagedataFrame)
   return(languageDF)
 }
-### Try typing tensorflow for user name and tensorflow for repository name as example
+### Try typing torvalds for user name and linux for repository name as example
 userName<-getUser()
 repoName<-getRepo()
 weekVector<-c()
@@ -136,4 +121,5 @@ languageInRepo
 dim(languageInRepo)
 languageVector<-unlist(languageInRepo[1,])
 languageVector
-barplot(languageVector)
+barplot(languageVector,col="pink",border="blue",xlab="Language used",ylab="Number of bytes coded")
+
