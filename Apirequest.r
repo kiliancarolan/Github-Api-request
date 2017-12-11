@@ -3,7 +3,7 @@ library(jsonlite)
 library(httpuv)
 library(httr)
 library(ggplot2)
-library(d3r)
+
 
 ### getting oauth to allow for more api requests within given time period
 oauth_endpoints("github")
@@ -107,6 +107,15 @@ repositoryParticipation<-function(desiredUser,desiredRepo,weekVector)
   ownervsoutsider<-data.frame(weekVector,ownerCommits,outsiderCommits)
   return(ownervsoutsider)
 }
+getRepoLanguage<-function(desiredUser,dersiredRepo)
+{
+  languagePaste<-paste0(githubURL,"/repos/",desiredUser,"/",dersiredRepo,"/languages")
+  language<-GET(languagePaste,gtoken)
+  languageJson = content(language)
+  languagedataFrame = jsonlite::fromJSON(jsonlite::toJSON(languageJson))
+  languageDF=data.frame(languagedataFrame)
+  return(languageDF)
+}
 ### Try typing tensorflow for user name and tensorflow for repository name as example
 userName<-getUser()
 repoName<-getRepo()
@@ -122,4 +131,9 @@ ownervsoutsiderDF
 ggplot(ownerDF,aes(x,y))+geom_point(aes(color="owners commits"))+
   geom_point(data=outsiderDF,aes(color="Non owner commits"))+
   labs(x="Week",y="Number of Commits",color="Legend",title="Commits made by Owner vs Contributer")
-
+languageInRepo<-getRepoLanguage(userName,repoName)
+languageInRepo
+dim(languageInRepo)
+languageVector<-unlist(languageInRepo[1,])
+languageVector
+barplot(languageVector)
